@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Musica</title>
+</head>
+<body>
+{% extends 'music/base.html' %}
+{% block body %}
+    {% if all_albums %}
+        <h3>here is album</h3>
+        <ul>
+            {% for album in all_albums %}
+            <li><a href="{% url 'music:detail' album.id %}">{{ album.album_title }}</a> </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h3>You dont have any albums</h3>
+    {% endif %}
+{% endblock %}
+</body>
+</html>

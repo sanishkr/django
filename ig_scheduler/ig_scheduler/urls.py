@@ -18,7 +18,7 @@ from django.contrib import admin
 from igs.views import *
 from rest_framework.authtoken import views as rest_framework_views
 # from django.urls import path
-from igs.views import login
+from igs.views import login,logout
 # import rest_framework
 
 urlpatterns = [
@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^user/$', UserDetail.as_view()),
     # url(r'^api/login/',rest_framework.urls),
     url('api/login', login),
+    url('api/logout', logout),
     url(r'^api/searchimage', imagesearch),
     url(r'^get_auth_token/$', rest_framework_views.obtain_auth_token, name='get_auth_token'),
 

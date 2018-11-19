@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 # import mongoengine
@@ -43,16 +45,31 @@ def login(request):
     return Response({'token': token.key},
                     status=HTTP_200_OK)
 
+def logout(self, request):
+    try:
+        request.user.auth_token.delete()
+    except (AttributeError, ObjectDoesNotExist):
+        pass
+
+    logout(request)
+
+    return Response({"success": _("Successfully logged out.")},
+                    status=status.HTTP_200_OK)
+
 @csrf_exempt
 @api_view(["POST"])
 def imagesearch(request):
     print(request.data)
     if 'image' not in request.data:
         raise ParseError("Empty content")
+    up_file = request.FILES['image']
+    destination = open('./' + up_file.name, 'wb+')
+    for chunk in up_file.chunks():
+        destination.write(chunk)
+        destination.close()
 
-    f = request.data['image']
-
-    mkimg.ImageURL.save(f.name, f, save=True)
+    # f = request.data['image']
+    # mkimg.ImageURL.save(f.name, f, save=True)
     return Response(status=status.HTTP_201_CREATED)
 
 class UserDetail(APIView):
